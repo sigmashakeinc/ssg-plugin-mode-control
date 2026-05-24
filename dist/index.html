@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Mode Control</title>
+		<style>
+			:root { color-scheme: dark; }
+			body {
+				margin: 0;
+				font: 14px/1.5 system-ui, sans-serif;
+				background: #0b0d10;
+				color: #e6e8eb;
+				padding: 20px;
+			}
+			h1 { font-size: 16px; margin: 0 0 4px; }
+			h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #8a939c; margin: 22px 0 8px; }
+			.row { display: flex; gap: 8px; }
+			button {
+				padding: 8px 14px; border-radius: 8px; border: 1px solid #232a31;
+				background: #14171c; color: #e6e8eb; cursor: pointer; font: inherit;
+			}
+			button.active { border-color: #3b82f6; background: #11203b; color: #bfdbfe; }
+			button:hover { border-color: #3b82f6; }
+			input, textarea {
+				width: 100%; box-sizing: border-box; padding: 8px 10px; margin: 4px 0;
+				background: #14171c; border: 1px solid #232a31; border-radius: 8px;
+				color: #e6e8eb; font: 13px/1.4 ui-monospace, monospace;
+			}
+			pre {
+				background: #14171c; border: 1px solid #232a31; border-radius: 8px;
+				padding: 12px; overflow: auto; font-size: 12px; white-space: pre-wrap;
+			}
+			.muted { color: #8a939c; font-size: 12px; }
+		</style>
+	</head>
+	<body>
+		<h1>Mode Control</h1>
+		<div class="muted">Current eval mode: <b id="mode">…</b></div>
+
+		<h2>Set mode</h2>
+		<div class="row" id="modes">
+			<button data-m="ask">ask</button>
+			<button data-m="allow">allow</button>
+			<button data-m="deny">deny</button>
+		</div>
+
+		<h2>Dry-run a tool call</h2>
+		<input id="tool" value="Bash" placeholder="Tool (e.g. Bash, Write)" />
+		<textarea id="input" rows="3" placeholder='{ "command": "…try a risky one and watch the verdict…" }'>{ "command": "ls -la" }</textarea>
+		<div class="row"><button id="run">Evaluate (no logging)</button></div>
+		<pre id="out" class="muted">result appears here…</pre>
+
+		<script type="module">
+			// Reference plugin — see @sigmashake/plugin-sdk for the typed client.
+			const cfg = window.__SSG_PLUGIN_CONFIG__ || {};
+			async function api(path, opts = {}) {
+				const headers = { Accept: "application/json", "X-SigmaShake-Token": cfg.token || "" };
+				if (opts.body !== undefined) headers["Content-Type"] = "application/json";
+				const r = await fetch(path, {
+					method: opts.method || "GET",
+					headers,
+					body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+				});
+				if (!r.ok) throw new Error("HTTP " + r.status);
+				return r.json();
+			}
+			const $ = (id) => document.getElementById(id);
+
+			async function refreshMode() {
+				try {
+					const m = await api("/api/json/mode");
+					const mode = m.mode || "?";
+					$("mode").textContent = mode;
+					for (const b of $("modes").children) {
+						b.classList.toggle("active", b.dataset.m === mode);
+					}
+				} catch (e) {
+					$("mode").textContent = "unavailable";
+				}
+			}
+			for (const b of $("modes").children) {
+				b.addEventListener("click", async () => {
+					try {
+						await api("/api/json/mode", { method: "POST", body: { mode: b.dataset.m } });
+						await refreshMode();
+					} catch (e) {
+						$("mode").textContent = "error: " + e.message;
+					}
+				});
+			}
+			$("run").addEventListener("click", async () => {
+				const out = $("out");
+				let input;
+				try {
+					input = JSON.parse($("input").value || "{}");
+				} catch (e) {
+					out.textContent = "input is not valid JSON: " + e.message;
+					return;
+				}
+				out.textContent = "evaluating…";
+				try {
+					const res = await api("/api/json/eval-dry-run", {
+						method: "POST",
+						body: { tool: $("tool").value || "Bash", input },
+					});
+					out.textContent = JSON.stringify(res, null, 2);
+				} catch (e) {
+					out.textContent = "error: " + e.message;
+				}
+			});
+
+			refreshMode();
+		</script>
+	</body>
+</html>

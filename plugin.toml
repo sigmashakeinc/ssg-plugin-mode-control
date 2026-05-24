@@ -1,0 +1,14 @@
+# mode-control — switch eval mode and dry-run tool calls without leaving the UI.
+id              = "mode-control"
+version         = "0.1.0"
+name            = "Mode Control"
+description     = "Switch eval mode (ask/allow/deny) and dry-run tool calls against your rules."
+category        = "tools"
+entry           = "index.html"
+min_ssg_version = "0.29.94"
+
+[[nav]]
+label   = "Mode Control"
+path    = "/plugins/mode-control/"
+section = "tools"
+order   = 60
