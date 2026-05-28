@@ -4,7 +4,7 @@
   "name": "Mode Control",
   "description": "Switch eval mode (ask/allow/deny) and dry-run tool calls against your rules.",
   "entry": "index.html",
-  "artifact_url": "__FILL_ME_IN__",
+  "artifact_url": "https://github.com/sigmashakeinc/ssg-plugin-mode-control/releases/download/v0.1.0/mode-control-0.1.0.tar.gz",
   "artifact_sha256": "0482fcc27e4c244dcdc2015caa8f75d587b280c2864ab1e8ae15bb1f3006a607",
   "artifact_signature": "d5dc656814252dcf626c82f04d5839b29b4e990221eccbd165dd4930a80bc01a6c2c95e7fd0eebd69b134f100e8448ded7c5c31fc67cff8668b77a46bf3c1d0b",
   "signing_fingerprint": "302a300506032b6570032100fa27b2eba3b238546c2c6bb48358f6e376cf31c80ab23d4215cacfabfc6dbd55",
