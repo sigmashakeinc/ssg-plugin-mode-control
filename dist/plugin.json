@@ -1,12 +1,12 @@
 {
   "id": "mode-control",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Mode Control",
   "description": "Switch eval mode (ask/allow/deny) and dry-run tool calls against your rules.",
   "entry": "index.html",
-  "artifact_url": "https://github.com/sigmashakeinc/ssg-plugin-mode-control/releases/download/v0.1.0/mode-control-0.1.0.tar.gz",
-  "artifact_sha256": "0482fcc27e4c244dcdc2015caa8f75d587b280c2864ab1e8ae15bb1f3006a607",
-  "artifact_signature": "d5dc656814252dcf626c82f04d5839b29b4e990221eccbd165dd4930a80bc01a6c2c95e7fd0eebd69b134f100e8448ded7c5c31fc67cff8668b77a46bf3c1d0b",
+  "artifact_url": "https://github.com/sigmashakeinc/ssg-plugin-mode-control/releases/download/v0.1.1/mode-control-0.1.1.tar.gz",
+  "artifact_sha256": "19de40df77ecdcdf3b599204c637d2a17f26a4b83d6ba4dafdf0dcd1eacda131",
+  "artifact_signature": "c5d30e47a4d4e895696c703dc99deaba6af08078308b1fbf32ef64d2598d82728ae8d7cb7614df9ecf1e624b3dc90f412b7527418b06f863a5bf884faa73c709",
   "signing_fingerprint": "302a300506032b6570032100fa27b2eba3b238546c2c6bb48358f6e376cf31c80ab23d4215cacfabfc6dbd55",
   "min_ssg_version": "0.29.94",
   "nav": [
